@@ -37,7 +37,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull WeatherAdapter.ViewHolder holder, int position) {
         WeatherModel model = arrayList.get(position);
-        holder.temperature.setText(model.getTemperature() + "*c");
+        holder.temperature.setText(model.getTemperature() + "°C");
         Picasso.get().load("http:".concat(model.getIcon())).into(holder.condition);
         holder.wind_speed.setText(model.getWindSpeed()+ "Km/h");
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");

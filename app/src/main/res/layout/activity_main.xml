@@ -9,44 +9,46 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="visible" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/relative_layout"
-        android:visibility="gone"
+        android:id="@+id/idRLHome"
+        android:visibility="visible"
         >
         <ImageView
-            android:id="@+id/background_image"
+            android:id="@+id/idIVBack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@color/black_shade"
             />
         <TextView
-            android:id="@+id/textView_city_name"
+            android:id="@+id/idTVCityName"
             android:layout_width="match_parent"
-            android:layout_marginTop="38dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
-            android:padding="28dp"
+            android:padding="20dp"
             android:text="City Name"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/linearLayout1">
+            android:weightSum="5"
+            android:layout_below="@+id/idTVCityName"
+            android:id="@+id/idLLEdit">
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="8dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/idTILCity"
-                android:layout_margin="18dp"
+                android:layout_margin="10dp"
                 android:layout_weight="4.5"
                 android:background="@android:color/transparent"
                 android:hint="Enter City Name"
@@ -56,7 +58,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/idEdtCity"
                 android:background="@android:color/transparent"
                 android:inputType="text"
@@ -66,9 +68,9 @@
                 android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
             <ImageView
-                android:layout_width="8dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="8.5"
+                android:layout_weight="0.5"
                 android:layout_margin="10dp"
                 android:layout_gravity="center"
                 android:id="@+id/searchIcon"
@@ -82,16 +84,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/temperature"
-            android:layout_below="@id/idEdtCity"
+            android:layout_below="@id/idLLEdit"
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
-            android:text="23"
+            android:text="23 °C"
             android:textSize="70dp"
-            tools:ignore="NotSibling" />
+           android:textColor="@color/white" />
         <ImageView
-            android:id="@+id/icon"
-            android:layout_width="match_parent"
+            android:id="@+id/idIVIcon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
@@ -100,19 +102,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/condition"
+            android:id="@+id/idTVCondition"
             android:gravity="center"
+            android:layout_margin="10dp"
             android:textAlignment="center"
             android:text="Condition"
             android:textColor="@color/white"
-            android:layout_below="@+id/icon"
+            android:layout_below="@+id/idIVIcon"
 
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
              android:layout_margin="8dp"
-             android:layout_marginBottom="8dp"
+             android:layout_marginBottom="10dp"
             android:text="Today's Weather Forecast"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -122,6 +125,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
