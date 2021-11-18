@@ -1,5 +1,7 @@
 package com.example.weatherapplication;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -7,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +20,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -42,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_LOCATION = 1;
     RelativeLayout homeRL;
     ProgressBar progressBar;
     TextView cityNameTV,temperatureTV , conditionTV;
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
      LocationManager locationManager;
      int PermissionCode = 1;
      String cityName;
+     String latitude,longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +89,13 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this ,new String[]{Manifest.permission.ACCESS_FINE_LOCATION ,
                     Manifest.permission.ACCESS_COARSE_LOCATION} , PermissionCode);
         }
-       Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            OnGPS();
+        } else {
+            getLocation();
+        }
+
 
             searchIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,29 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-//    private String getCityName(double longitude , double latitude){
-//        String city_Name = "Not Found";
-//        Geocoder gcd = new Geocoder(getBaseContext() , Locale.getDefault());
-//        try{
-//            List<Address> addresses = gcd.getFromLocation(latitude , longitude , 10);
-//            for(Address address:addresses) {
-//                if (address != null) {
-//                    String city = address.getLocality();
-//                    if (city != null && !city.equals("")) {
-//                        city_Name = city;
-//
-//                    } else {
-//                        Toast.makeText(this, "User City Not Found..", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                }
-//            }
-//
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//        return city_Name;
-//    }
+
     private void getWeatherInfo(String cityName){
         String url = "https://api.weatherapi.com/v1/forecast.json?key=68ea7c5dd8244ec5a88111310210311&q="+ cityName +"&days=1&aqi=yes&alerts=yes";
         cityNameTV.setText(cityName);
@@ -152,8 +145,9 @@ public class MainActivity extends AppCompatActivity {
                   //  String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
                     conditionTV.setText(condition);
+                    Log.i(TAG, "isDay: "+ isDay);
                     if(isDay == 1){
-                        Picasso.get().load("https://www.google.com/imgres?imgurl=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F3265126.jpg&imgrefurl=https%3A%2F%2Fwallpaperaccess.com%2Fsunny-day&tbnid=szUnE3zyaQCA1M&vet=12ahUKEwjMm-WK64j0AhWwm0sFHaMRBx0QMygAegUIARDbAQ..i&docid=Oqpd-Fe0D5k-fM&w=2560&h=1600&q=day%20background%20image&ved=2ahUKEwjMm-WK64j0AhWwm0sFHaMRBx0QMygAegUIARDbAQ").into(backIV);
+                        Picasso.get().load("https://www.google.com/imgres?imgurl=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F2777454.jpg&imgrefurl=https%3A%2F%2Fwallpaperaccess.com%2Fday&tbnid=P3iZyslWn4nxbM&vet=12ahUKEwi0tsjVwqH0AhW_oUsFHYrICxwQMyg3egQIARBc..i&docid=jfWmY13qJ4NQ_M&w=1920&h=1200&q=day%20background%20image&ved=2ahUKEwi0tsjVwqH0AhW_oUsFHYrICxwQMyg3egQIARBc").into(backIV);
                     }else{
                         Picasso.get().load("https://www.google.com/imgres?imgurl=https%3A%2F%2Fimage.shutterstock.com%2Fimage-photo%2Fbackgrounds-night-sky-stars-moon-260nw-255423403.jpg&imgrefurl=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Fnight%2Bbackground&tbnid=iADafWnjCJAyDM&vet=12ahUKEwjBh87L64j0AhVxzXMBHSk6ClkQMygBegUIARDPAQ..i&docid=wCeLTpUSLEDzOM&w=299&h=280&q=night%20background%20image&ved=2ahUKEwjBh87L64j0AhVxzXMBHSk6ClkQMygBegUIARDPAQ").into(backIV);
                     }
@@ -182,6 +176,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
+    }
+    private void OnGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+
+                String cityName = getCityName(longi , lat);
+                cityNameTV.setText(cityName);
+                getWeatherInfo(cityName);
+            } else {
+                Toast.makeText(this, "Unable to find your location.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+        private String getCityName(double longitude , double latitude){
+        String city_Name = "Not Found";
+        Geocoder gcd = new Geocoder(getBaseContext() , Locale.getDefault());
+        try{
+            List<Address> addresses = gcd.getFromLocation(latitude , longitude , 10);
+            for(Address address:addresses) {
+                if (address != null) {
+                    String city = address.getLocality();
+                    if (city != null && !city.equals("")) {
+                        city_Name = city;
+
+                    } else {
+                        Toast.makeText(this, "User City Not Found..", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return city_Name;
     }
 
 }

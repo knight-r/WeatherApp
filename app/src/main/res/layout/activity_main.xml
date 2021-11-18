@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@color/black_shade"
             />
         <TextView
             android:id="@+id/idTVCityName"
@@ -34,8 +33,8 @@
             android:padding="20dp"
             android:text="City Name"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textColor="@color/teal_200"
+            android:textSize="20sp"
             android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,6 +53,7 @@
                 android:hint="Enter City Name"
                 android:padding="5dp"
                 app:hintTextColor="@color/white"
+                android:textSize="16sp"
                 android:textColorHint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -72,10 +72,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:layout_margin="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_gravity="center"
                 android:id="@+id/searchIcon"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_search"
+                app:boxStrokeColor="@android:color/transparent"
                 app:tint="@color/white"
                 />
 
@@ -117,8 +119,9 @@
              android:layout_margin="8dp"
              android:layout_marginBottom="10dp"
             android:text="Today's Weather Forecast"
-            android:textColor="@color/white"
+            android:textColor="@color/green"
             android:textStyle="bold"
+
             android:layout_above="@+id/recyclerView"
 
             />
