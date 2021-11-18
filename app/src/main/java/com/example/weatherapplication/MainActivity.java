@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         progressBar.setVisibility(View.GONE);
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait.....");
+        progressDialog.setCancelable(false);
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this ,new String[]{Manifest.permission.ACCESS_FINE_LOCATION ,
                     Manifest.permission.ACCESS_COARSE_LOCATION} , PermissionCode);
@@ -92,25 +96,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             OnGPS();
-        } else {
+        }else{
             getLocation();
         }
+        searchIcon.setOnClickListener(new View.OnClickListener() {
 
-
-            searchIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    progressDialog.show();
                     String city = cityEdt.getText().toString();
                     if (city.isEmpty()) {
+                        progressDialog.dismiss();
                         Toast.makeText(MainActivity.this, "Enter city name..", Toast.LENGTH_SHORT).show();
                     } else {
+                        progressDialog.dismiss();
                         cityNameTV.setText(city);
                         getWeatherInfo(city);
                     }
                 }
             });
-
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -201,13 +205,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (locationGPS != null) {
-                double lat = locationGPS.getLatitude();
-                double longi = locationGPS.getLongitude();
-
-                String cityName = getCityName(longi , lat);
+                double latitude = locationGPS.getLatitude();
+                double longitude = locationGPS.getLongitude();
+                String cityName = getCityName(longitude , latitude);
                 cityNameTV.setText(cityName);
                 getWeatherInfo(cityName);
-            } else {
+            }else {
                 Toast.makeText(this, "Unable to find your location.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -225,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(this, "User City Not Found..", Toast.LENGTH_SHORT).show();
-
                     }
                 }
             }
