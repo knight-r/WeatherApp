@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             getLocation();
         }
         searchIcon.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     progressDialog.show();
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         getWeatherInfo(city);
                     }
                 }
-            });
+        });
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -6,13 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/black_shade"
     tools:context=".MainActivity">
-
-    <ProgressBar
+      <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible" />
+        android:visibility="visible"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -95,11 +94,11 @@
            android:textColor="@color/white" />
         <ImageView
             android:id="@+id/idIVIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/dark_clouds"
             android:layout_below="@+id/temperature"/>
         <TextView
             android:layout_width="match_parent"
@@ -122,10 +121,7 @@
             android:text="Today's Weather Forecast"
             android:textColor="@color/teal_200"
             android:textStyle="bold"
-
-            android:layout_above="@+id/recyclerView"
-
-            />
+            android:layout_above="@+id/recyclerView"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -134,8 +130,6 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:id="@+id/recyclerView"/>
-
-            
 </RelativeLayout>
 
 </RelativeLayout>
